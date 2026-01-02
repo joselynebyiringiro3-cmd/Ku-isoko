@@ -1,50 +1,58 @@
 const nodemailer = require('nodemailer');
 
-// Create reusable transporter
-const createTransporter = () => {
+// Create reusable transporter and detect provider
+const getTransporterConfig = () => {
   // If Resend API key is provided, use Resend (highly recommended for Render)
   if (process.env.RESEND_API_KEY) {
-    return nodemailer.createTransport({
-      host: 'smtp.resend.com',
-      port: 465,
-      secure: true,
-      auth: {
-        user: 'resend',
-        pass: process.env.RESEND_API_KEY,
-      },
-      connectionTimeout: 10000,
-    });
+    console.log('📧 Using Resend email provider');
+    return {
+      transporter: nodemailer.createTransport({
+        host: 'smtp.resend.com',
+        port: 465,
+        secure: true,
+        auth: {
+          user: 'resend',
+          pass: process.env.RESEND_API_KEY,
+        },
+        connectionTimeout: 10000,
+      }),
+      from: process.env.EMAIL_FROM || 'onboarding@resend.dev'
+    };
   }
 
   // Fallback to Gmail
+  console.log('📧 Using Gmail email provider');
   const host = process.env.EMAIL_HOST || 'smtp.gmail.com';
   const port = parseInt(process.env.EMAIL_PORT) || 465;
 
-  return nodemailer.createTransport({
-    host,
-    port,
-    secure: port === 465,
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-    tls: {
-      rejectUnauthorized: false,
-      minVersion: 'TLSv1.2'
-    },
-    connectionTimeout: 15000,
-    greetingTimeout: 10000,
-    socketTimeout: 20000,
-  });
+  return {
+    transporter: nodemailer.createTransport({
+      host,
+      port,
+      secure: port === 465,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+      tls: {
+        rejectUnauthorized: false,
+        minVersion: 'TLSv1.2'
+      },
+      connectionTimeout: 15000,
+      greetingTimeout: 10000,
+      socketTimeout: 20000,
+    }),
+    from: process.env.EMAIL_USER
+  };
 };
 
 // Send OTP email
 const sendOTPEmail = async (email, code, subject = 'Password Reset OTP') => {
   try {
-    const transporter = createTransporter();
+    const { transporter, from } = getTransporterConfig();
 
     const mailOptions = {
-      from: `"Ku-isoko" <${process.env.EMAIL_USER}>`,
+      from: `"Ku-isoko" <${from}>`,
       to: email,
       subject: subject,
       html: `
@@ -109,10 +117,10 @@ const sendOTPEmail = async (email, code, subject = 'Password Reset OTP') => {
 // Send verification email
 const sendVerificationEmail = async (email, name) => {
   try {
-    const transporter = createTransporter();
+    const { transporter, from } = getTransporterConfig();
 
     const mailOptions = {
-      from: `"Ku-isoko" <${process.env.EMAIL_USER}>`,
+      from: `"Ku-isoko" <${from}>`,
       to: email,
       subject: 'Welcome to Ku-isoko - Account Created',
       html: `
@@ -151,7 +159,7 @@ const sendVerificationEmail = async (email, name) => {
     await transporter.sendMail(mailOptions);
     return true;
   } catch (error) {
-    console.error('Email sending error:', error);
+    console.error('Email sending error details:', error);
     // Don't throw error for verification email
     return false;
   }
