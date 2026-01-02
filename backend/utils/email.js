@@ -3,7 +3,7 @@ const nodemailer = require('nodemailer');
 // Create reusable transporter
 const createTransporter = () => {
   const host = process.env.EMAIL_HOST || 'smtp.gmail.com';
-  const port = parseInt(process.env.EMAIL_PORT) || 587;
+  const port = parseInt(process.env.EMAIL_PORT) || 465;
 
   return nodemailer.createTransport({
     host,
@@ -78,7 +78,12 @@ const sendOTPEmail = async (email, code, subject = 'Password Reset OTP') => {
     await transporter.sendMail(mailOptions);
     return true;
   } catch (error) {
-    console.error('Email sending error:', error);
+    console.error('Email sending error details:', {
+      message: error.message,
+      code: error.code,
+      response: error.response,
+      stack: error.stack
+    });
     throw new Error('Failed to send email');
   }
 };
