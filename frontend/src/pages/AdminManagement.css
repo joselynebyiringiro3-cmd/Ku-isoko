@@ -1,0 +1,264 @@
+.admin-management-container {
+    padding: 2.5rem;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.management-header {
+    margin-bottom: 2rem;
+}
+
+.management-header h1 {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #1a202c;
+    letter-spacing: -0.5px;
+}
+
+/* Filters & Search */
+.filters-bar {
+    background: white;
+    padding: 1.25rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    border: 1px solid #f1f5f9;
+}
+
+.search-wrapper {
+    position: relative;
+    flex: 1;
+    max-width: 450px;
+}
+
+.search-wrapper svg {
+    position: absolute;
+    left: 1.1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 1rem;
+}
+
+.search-wrapper input {
+    width: 100%;
+    padding: 0.8rem 1rem 0.8rem 2.8rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: #f8fafc;
+    color: #1e293b;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+}
+
+.search-wrapper input:focus {
+    background: white;
+    border-color: #4a00e0;
+    box-shadow: 0 0 0 3px rgba(74, 0, 224, 0.1);
+}
+
+.status-filters {
+    display: flex;
+    gap: 0.6rem;
+}
+
+.status-filters button {
+    padding: 0.6rem 1.2rem;
+    border: 1px solid #e2e8f0;
+    background: white;
+    color: #64748b;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.status-filters button:hover {
+    background: #f8fafc;
+    color: #4a00e0;
+    border-color: #cbd5e1;
+}
+
+.status-filters button.active {
+    background: #4a00e0;
+    color: white;
+    border-color: #4a00e0;
+    box-shadow: 0 4px 10px rgba(74, 0, 224, 0.2);
+}
+
+/* Tables */
+.admin-table-wrapper {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
+    border: 1px solid #f1f5f9;
+    overflow: hidden;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-table th {
+    background: #f8fafc;
+    padding: 1.25rem 1rem;
+    text-align: left;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 2px solid #f1f5f9;
+}
+
+.admin-table td {
+    padding: 1.25rem 1rem;
+    color: #334155;
+    font-size: 0.95rem;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+}
+
+.admin-table tr:hover td {
+    background: #fdfdfd;
+}
+
+.admin-table tr:last-child td {
+    border-bottom: none;
+}
+
+.store-cell {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.store-avatar-small {
+    width: 40px;
+    height: 40px;
+    background: #f0f4ff;
+    color: #4a00e0;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 800;
+}
+
+/* Badges */
+.status-badge {
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-block;
+}
+
+.status-badge.active,
+.status-badge.delivered {
+    background: #ecfdf5;
+    color: #10b981;
+}
+
+.status-badge.pending,
+.status-badge.processing {
+    background: #fff7ed;
+    color: #f97316;
+}
+
+.status-badge.blocked,
+.status-badge.cancelled {
+    background: #fef2f2;
+    color: #ef4444;
+}
+
+/* Actions */
+.actions-cell {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.action-btn {
+    width: 38px;
+    height: 38px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background: white;
+    color: #64748b;
+    transition: all 0.2s;
+    font-size: 1rem;
+}
+
+.action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.action-btn.info:hover {
+    color: #3b82f6;
+    border-color: #3b82f6;
+    background: #eff6ff;
+}
+
+.action-btn.danger:hover {
+    color: #ef4444;
+    border-color: #ef4444;
+    background: #fef2f2;
+}
+
+.action-btn.warning:hover {
+    color: #f59e0b;
+    border-color: #f59e0b;
+    background: #fffbeb;
+}
+
+.status-select,
+.role-select {
+    padding: 0.6rem 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    background: #f8fafc;
+    color: #1e293b;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.2s;
+}
+
+.status-select:focus,
+.role-select:focus {
+    border-color: #4a00e0;
+    background: white;
+}
+
+@media (max-width: 1024px) {
+    .filters-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1.5rem;
+    }
+
+    .search-wrapper {
+        max-width: 100%;
+    }
+
+    .status-filters {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+}

@@ -1,0 +1,110 @@
+.product-form-container {
+    min-height: calc(100vh - 80px);
+    background: #f7fafc;
+    padding: 2rem 0;
+}
+
+.form-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.form-card {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.form-title {
+    margin-bottom: 2rem;
+    color: #2d3748;
+    font-size: 1.8rem;
+    border-bottom: 2px solid #edf2f7;
+    padding-bottom: 1rem;
+}
+
+.image-preview {
+    margin-top: 1rem;
+    padding: 0.5rem;
+    border: 1px dashed #cbd5e0;
+    border-radius: 8px;
+    display: inline-block;
+}
+
+.image-preview img {
+    max-height: 200px;
+    max-width: 100%;
+    border-radius: 4px;
+    display: block;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #edf2f7;
+}
+
+.btn-save {
+    padding: 0.8rem 2rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.2s;
+}
+
+.btn-save:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.btn-cancel {
+    padding: 0.8rem 1.5rem;
+    background: white;
+    color: #718096;
+    border: 1px solid #cbd5e0;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-cancel:hover {
+    background: #f7fafc;
+    color: #4a5568;
+}
+
+@media (max-width: 768px) {
+    .form-wrapper {
+        padding: 0 1rem;
+    }
+
+    .form-card {
+        padding: 1.5rem;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .form-actions {
+        flex-direction: column-reverse;
+    }
+
+    .btn-save,
+    .btn-cancel {
+        width: 100%;
+        justify-content: center;
+    }
+}

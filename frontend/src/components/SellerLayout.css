@@ -1,0 +1,92 @@
+/* Layout container */
+.seller-layout-container {
+    display: flex;
+    min-height: calc(100vh - 80px);
+    /* Adjust based on header height */
+    background: #f7fafc;
+}
+
+/* Sidebar Styling */
+.seller-sidebar {
+    width: 260px;
+    background: #2d3748;
+    /* Slightly lighter than admin for distinction */
+    color: white;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+.seller-sidebar h2 {
+    color: white;
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #4a5568;
+}
+
+.seller-sidebar nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* Sidebar Links (NavLink) */
+.seller-sidebar a {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: transparent;
+    border: none;
+    color: #cbd5e0;
+    font-size: 1.1rem;
+    cursor: pointer;
+    text-align: left;
+    border-radius: 8px;
+    transition: all 0.2s;
+    text-decoration: none;
+}
+
+.seller-sidebar a:hover,
+.seller-sidebar a.active {
+    background: #4a5568;
+    color: white;
+}
+
+/* Content Area */
+.seller-content-area {
+    flex: 1;
+    overflow-y: auto;
+    width: 100%;
+}
+
+.seller-content-wrapper {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Responsive */
+@media (max-width: 968px) {
+    .seller-layout-container {
+        flex-direction: column;
+    }
+
+    .seller-sidebar {
+        width: 100%;
+        padding: 1rem;
+    }
+
+    .seller-sidebar nav {
+        flex-direction: row;
+        overflow-x: auto;
+    }
+
+    .seller-sidebar a {
+        white-space: nowrap;
+        padding: 0.75rem 1rem;
+        font-size: 0.95rem;
+    }
+}
