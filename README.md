@@ -42,9 +42,10 @@ Ku-isoko is a comprehensive e-commerce platform that enables:
 - ✅ MTN MoMo (Sandbox)
 - ✅ Stripe payment gateway
 - ✅ Payment status tracking
-- ✅ Automatic stock deduction
+- ✅ Verified stock deduction (post-payment only)
 
 ## 🛠️ Tech Stack
+
 
 ### Backend
 - **Runtime**: Node.js
@@ -269,6 +270,8 @@ Create test accounts via signup or seed script:
 This project is licensed under the MIT License.
 
 ## 👥 Authors
+
+- **Byiringiro Joselyne** - *Lead Developer* - [joselynebyiringiro3-cmd](https://github.com/joselynebyiringiro3-cmd)
 
 Built as a comprehensive multi-vendor e-commerce solution.
 
