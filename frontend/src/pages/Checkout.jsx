@@ -371,7 +371,10 @@ const CheckoutContent = () => {
                             <div className="summary-items">
                                 {cartItems.map((item) => (
                                     <div key={item._id} className="summary-item">
-                                        <img src={item.productId?.imageUrl} alt={item.productId?.name} />
+                                        <img
+                                            src={item.productId?.imageUrl?.startsWith('http') ? item.productId.imageUrl : `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${item.productId?.imageUrl}`}
+                                            alt={item.productId?.name}
+                                        />
                                         <div className="summary-item-details">
                                             <p className="summary-item-name">{item.productId?.name}</p>
                                             <p className="summary-item-qty">Qty: {item.quantity}</p>

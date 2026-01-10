@@ -79,8 +79,12 @@ const sendEmail = async (mailOptions) => {
   };
 
   try {
-    await transporter.sendMail(options);
+    const info = await transporter.sendMail(options);
     console.log('✨ SMTP Success');
+    const previewUrl = nodemailer.getTestMessageUrl(info);
+    if (previewUrl) {
+      console.log('📬 Ethereal Preview URL:', previewUrl);
+    }
     return true;
   } catch (error) {
     console.error('❌ SMTP Error:', {
@@ -88,6 +92,27 @@ const sendEmail = async (mailOptions) => {
       code: error.code
     });
     throw new Error('Failed to send email via SMTP');
+  }
+};
+
+/**
+ * Wrapper to handle email sending with fallback for Development
+ */
+const safeSendEmail = async (mailOptions) => {
+  try {
+    return await sendEmail(mailOptions);
+  } catch (error) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('⚠️  [DEV MODE] Email sending failed. Logging to console instead of crashing:');
+      console.log('--- EMAIL CONTENT START ---');
+      console.log(`To: ${mailOptions.to}`);
+      console.log(`Subject: ${mailOptions.subject}`);
+      console.log('Content (HTML):');
+      console.log(mailOptions.html);
+      console.log('--- EMAIL CONTENT END ---');
+      return true; // Pretend it succeeded
+    }
+    throw error;
   }
 };
 
@@ -138,7 +163,8 @@ const sendOTPEmail = async (email, code, subject = 'Password Reset OTP') => {
     </html>
   `;
 
-  return await sendEmail({ to: email, subject, html });
+
+  return await safeSendEmail({ to: email, subject, html });
 };
 
 // Send verification email
@@ -176,7 +202,7 @@ const sendVerificationEmail = async (email, name) => {
   `;
 
   try {
-    return await sendEmail({ to: email, subject: 'Welcome to Ku-isoko - Account Created', html });
+    return await safeSendEmail({ to: email, subject: 'Welcome to Ku-isoko - Account Created', html });
   } catch (error) {
     return false; // Non-critical
   }

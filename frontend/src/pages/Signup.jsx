@@ -89,7 +89,6 @@ const Signup = () => {
                         <input type="radio" name="role" value="seller" checked={role === 'seller'} onChange={() => { }} />
                         <strong>Seller</strong>
                         <p>Sell your products</p>
-                        <span className="approval-badge" style={{ fontSize: '0.7rem', color: '#667eea', fontWeight: 'bold' }}>Requires Admin Approval</span>
                     </div>
                 </div>
 

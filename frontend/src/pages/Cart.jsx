@@ -62,7 +62,7 @@ const Cart = () => {
                                 <div key={item._id} className="cart-item">
                                     <div className="item-image">
                                         <img
-                                            src={item.productId?.imageUrl}
+                                            src={item.productId?.imageUrl?.startsWith('http') ? item.productId.imageUrl : `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${item.productId?.imageUrl}`}
                                             alt={item.productId?.name}
                                             onClick={() => navigate(`/products/${item.productId?._id}`)}
                                         />

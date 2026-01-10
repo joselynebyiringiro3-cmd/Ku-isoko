@@ -111,7 +111,10 @@ const OrderHistory = () => {
                                         <div className="order-items">
                                             {order.items.slice(0, 3).map((item, index) => (
                                                 <div key={index} className="order-item-preview">
-                                                    <img src={item.imageUrl} alt={item.name} />
+                                                    <img
+                                                        src={item.imageUrl?.startsWith('http') ? item.imageUrl : `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${item.imageUrl}`}
+                                                        alt={item.name}
+                                                    />
                                                     <div className="item-info">
                                                         <p className="item-name">{item.name}</p>
                                                         <p className="item-qty">Qty: {item.quantity}</p>

@@ -14,12 +14,19 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
  * Get MoMo Access Token
  */
 const getMoMoAccessToken = async () => {
+    console.log('--- MoMo Debug ---');
+    console.log('Base URL:', MOMO_BASE_URL);
+    console.log('Sub Key:', MOMO_SUBSCRIPTION_KEY ? MOMO_SUBSCRIPTION_KEY.substring(0, 4) + '...' : 'MISSING');
+    console.log('API User:', MOMO_API_USER ? MOMO_API_USER.substring(0, 4) + '...' : 'MISSING');
+    console.log('API Key:', MOMO_API_KEY ? 'Has Value' : 'MISSING');
+
     try {
         const response = await axios.post(
             `${MOMO_BASE_URL}/collection/token/`,
             {},
             {
                 headers: {
+                    'X-Target-Environment': 'sandbox',
                     'Ocp-Apim-Subscription-Key': MOMO_SUBSCRIPTION_KEY,
                     Authorization: `Basic ${Buffer.from(`${MOMO_API_USER}:${MOMO_API_KEY}`).toString('base64')}`,
                 },

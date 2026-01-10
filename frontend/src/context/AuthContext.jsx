@@ -108,9 +108,18 @@ export const AuthProvider = ({ children }) => {
         toast.success('Logged out successfully');
     };
 
-    const registerToken = (newToken) => {
+    const registerToken = async (newToken) => {
         setToken(newToken);
         localStorage.setItem('token', newToken);
+
+        // Fetch user data immediately
+        try {
+            const response = await api.get('/auth/me');
+            setUser(response.data.data.user);
+            localStorage.setItem('user', JSON.stringify(response.data.data.user)); // Persist user data
+        } catch (error) {
+            console.error('Failed to load user profile after Google Login:', error);
+        }
     };
 
     const updateUser = (userData) => {

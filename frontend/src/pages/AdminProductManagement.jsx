@@ -100,7 +100,7 @@ const AdminProductManagement = () => {
                                 <tr key={product._id}>
                                     <td className="store-cell">
                                         <img
-                                            src={product.imageUrl}
+                                            src={product.imageUrl?.startsWith('http') ? product.imageUrl : `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${product.imageUrl}`}
                                             alt={product.name}
                                             style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '4px' }}
                                         />

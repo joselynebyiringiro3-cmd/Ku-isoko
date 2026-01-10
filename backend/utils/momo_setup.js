@@ -42,10 +42,12 @@ const setupMoMo = async (key, name) => {
         const apiKey = response.data.apiKey;
         console.log('✅ API Key generated');
 
+        const fs = require('fs');
+        const output = `MTN_MOMO_SUBSCRIPTION_KEY=${key.trim()}\nMTN_MOMO_API_USER=${apiUser}\nMTN_MOMO_API_KEY=${apiKey}\n`;
+        fs.writeFileSync('backend/credentials.txt', output);
+
         console.log('\n--- SUCCESS! COPY THESE ---');
-        console.log(`MTN_MOMO_SUBSCRIPTION_KEY=${key.trim()}`);
-        console.log(`MTN_MOMO_API_USER=${apiUser}`);
-        console.log(`MTN_MOMO_API_KEY=${apiKey}`);
+        console.log(output);
         console.log('--------------------------\n');
 
     } catch (error) {
@@ -53,9 +55,23 @@ const setupMoMo = async (key, name) => {
     }
 };
 
+const fs = require('fs');
+
 const run = async () => {
-    await setupMoMo('35da4b2599b44ce49bc2acfc32b9e283', 'Primary Key');
-    await setupMoMo('f32591c0eaba40bdb5a5cad407d5450a', 'Secondary Key');
+    // Redirect console log to catch output or just write file
+    const logFile = 'credentials.txt';
+    const originalLog = console.log;
+    fs.writeFileSync(logFile, ''); // Clear file
+
+    const logToFile = (message) => {
+        fs.appendFileSync(logFile, message + '\n');
+        originalLog(message);
+    };
+
+    // Monkey patch console.log for this run (or just use fs in setupMoMo but this is less intrusive to the logic)
+    // Actually, let's just modify the setupMoMo function to return values or write to file.
+    // Simpler: Just calling the function and let's modify setupMoMo to write to file.
+    await setupMoMo('730ae0ce4324424ba084963ea59ec9a3', 'Primary Key');
 };
 
 run();

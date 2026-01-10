@@ -58,20 +58,23 @@ const createOrder = asyncHandler(async (req, res) => {
             });
         }
 
+        // Use current product price, not the one in cart (to match seller's current setting)
+        const currentPrice = product.price;
+
         orderItems.push({
             productId: product._id,
             sellerId: item.sellerId,
             name: product.name,
-            price: item.price,
+            price: currentPrice, // Use fresh price
             quantity: item.quantity,
             imageUrl: product.imageUrl,
         });
 
-        totalPrice += item.price * item.quantity;
+        totalPrice += currentPrice * item.quantity;
 
-        // Decrease product stock
-        product.decreaseStock(item.quantity);
-        await product.save();
+        // Stock will be deducted upon payment confirmation, not here.
+        // product.decreaseStock(item.quantity);
+        // await product.save();
     }
 
     // Calculate fees

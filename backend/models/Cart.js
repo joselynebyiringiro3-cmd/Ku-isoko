@@ -56,6 +56,7 @@ cartSchema.methods.addItem = function (productId, sellerId, quantity, price) {
     if (existingItemIndex > -1) {
         // Update existing item
         this.items[existingItemIndex].quantity += quantity;
+        this.items[existingItemIndex].price = price; // Refresh price
     } else {
         // Add new item
         this.items.push({ productId, sellerId, quantity, price });

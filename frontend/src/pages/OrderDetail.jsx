@@ -163,7 +163,10 @@ const OrderDetail = () => {
                                 <div className="items-list">
                                     {sellerData.items.map((item, index) => (
                                         <div key={index} className="order-item">
-                                            <img src={item.imageUrl} alt={item.name} />
+                                            <img
+                                                src={item.imageUrl?.startsWith('http') ? item.imageUrl : `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${item.imageUrl}`}
+                                                alt={item.name}
+                                            />
                                             <div className="item-details">
                                                 <h3>{item.name}</h3>
                                                 <p className="item-price">{Math.round(item.price).toLocaleString()} Rwf × {item.quantity}</p>

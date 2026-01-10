@@ -39,7 +39,7 @@ const signup = asyncHandler(async (req, res) => {
             storeName: req.body.storeName || `${name}'s Store`,
             storeDescription: req.body.storeDescription || '',
             phone: phone || '',
-            sellerStatus: 'pending', // Require admin approval
+            sellerStatus: 'active', // Direct approval for new signups
         });
     }
 

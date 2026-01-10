@@ -1,4 +1,5 @@
 const Order = require('../models/Order');
+const Product = require('../models/Product');
 const {
     initiateMoMoPayment,
     verifyMoMoPayment,
@@ -6,6 +7,28 @@ const {
     verifyStripePayment,
 } = require('../utils/payment');
 const { asyncHandler } = require('../middleware/errorHandler');
+
+// Helper to deduct stock safely
+const deductStockForOrder = async (order) => {
+    // 1. Double check stock for all items first (Atomic check better but complex, sequential check for now)
+    for (const item of order.items) {
+        const product = await Product.findById(item.productId);
+        if (!product || !product.isInStock(item.quantity)) {
+            throw new Error(`Item ${item.name} is out of stock. Payment received but order cannot be fulfilled.`);
+        }
+    }
+
+    // 2. Deduct stock
+    for (const item of order.items) {
+        const product = await Product.findById(item.productId);
+        if (product) {
+            product.decreaseStock(item.quantity);
+            await product.save();
+        }
+    }
+    return true;
+};
+
 
 /**
  * @route   POST /api/payments/momo/initiate
@@ -33,12 +56,16 @@ const initiateMoMo = asyncHandler(async (req, res) => {
         });
     }
 
-    // Check if payment method is momo
+    // Check if payment method is momo, if not and pending, switch it
     if (order.paymentMethod !== 'momo') {
-        return res.status(400).json({
-            success: false,
-            message: 'Order payment method is not MoMo',
-        });
+        if (order.paymentStatus === 'paid') {
+            return res.status(400).json({
+                success: false,
+                message: 'Order is already paid with a different method',
+            });
+        }
+        order.paymentMethod = 'momo';
+        await order.save();
     }
 
     // Initiate payment
@@ -99,15 +126,24 @@ const verifyMoMo = asyncHandler(async (req, res) => {
     const verificationResult = await verifyMoMoPayment(order.momoTransactionId);
 
     if (verificationResult.success) {
-        order.paymentStatus = 'paid';
-        order.orderStatus = 'paid';
-        await order.save();
+        try {
+            await deductStockForOrder(order);
 
-        res.json({
-            success: true,
-            message: 'Payment verified successfully',
-            data: { order },
-        });
+            order.paymentStatus = 'paid';
+            order.orderStatus = 'paid';
+            await order.save();
+
+            res.json({
+                success: true,
+                message: 'Payment verified and stock updated successfully',
+                data: { order },
+            });
+        } catch (error) {
+            return res.status(400).json({
+                success: false,
+                message: error.message || 'Payment verified but stock update failed',
+            });
+        }
     } else {
         res.json({
             success: false,
@@ -145,12 +181,16 @@ const initiateStripe = asyncHandler(async (req, res) => {
         });
     }
 
-    // Check if payment method is stripe
+    // Check if payment method is stripe, if not and pending, switch it
     if (order.paymentMethod !== 'stripe') {
-        return res.status(400).json({
-            success: false,
-            message: 'Order payment method is not Stripe',
-        });
+        if (order.paymentStatus === 'paid') {
+            return res.status(400).json({
+                success: false,
+                message: 'Order is already paid with a different method',
+            });
+        }
+        order.paymentMethod = 'stripe';
+        await order.save();
     }
 
     // Initiate payment
@@ -212,15 +252,24 @@ const verifyStripe = asyncHandler(async (req, res) => {
     const verificationResult = await verifyStripePayment(order.stripePaymentId);
 
     if (verificationResult.success) {
-        order.paymentStatus = 'paid';
-        order.orderStatus = 'paid';
-        await order.save();
+        try {
+            await deductStockForOrder(order);
 
-        res.json({
-            success: true,
-            message: 'Payment verified successfully',
-            data: { order },
-        });
+            order.paymentStatus = 'paid';
+            order.orderStatus = 'paid';
+            await order.save();
+
+            res.json({
+                success: true,
+                message: 'Payment verified and stock updated successfully',
+                data: { order },
+            });
+        } catch (error) {
+            return res.status(400).json({
+                success: false,
+                message: error.message || 'Payment verified but stock update failed',
+            });
+        }
     } else {
         res.json({
             success: false,
@@ -260,9 +309,15 @@ const stripeWebhook = asyncHandler(async (req, res) => {
 
         const order = await Order.findById(orderId);
         if (order) {
-            order.paymentStatus = 'paid';
-            order.orderStatus = 'paid';
-            await order.save();
+            try {
+                await deductStockForOrder(order);
+                order.paymentStatus = 'paid';
+                order.orderStatus = 'paid';
+                await order.save();
+            } catch (error) {
+                console.error('Webhook Stock Update Failed:', error.message);
+                // In real prod, this might need manual intervention or email to admin
+            }
         }
     }
 
